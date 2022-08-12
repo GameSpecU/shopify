@@ -19,41 +19,41 @@ use Serializable;
 abstract class AbstractModel implements JsonSerializable, Serializable, ArrayAccess
 {
     /** @var string $resource_name */
-    public static $resource_name;
+    public static string $resource_name;
 
     /** @var string $resource_name_many */
-    public static $resource_name_many;
+    public static string $resource_name_many;
 
     /** @var string $identifier */
-    public static $identifier = 'id';
+    public static string $identifier = 'id';
 
     /** @var array $omit_on_replication */
-    public static $omit_on_replication = ['id', 'updated_at', 'created_at'];
+    public static array $omit_on_replication = ['id', 'updated_at', 'created_at'];
 
     /** @var array $original */
-    protected $original = [];
+    protected array $original = [];
 
     /** @var array $attributes */
-    protected $attributes = [];
+    protected array $attributes = [];
 
     /** @var string $date_format */
-    protected $date_format = 'c';
+    protected string $date_format = 'c';
 
     /** @var array $dates */
-    protected $dates = [];
+    protected array $dates = [];
 
     /** @var array $casts */
-    protected $casts = [];
+    protected array $casts = [];
 
     /** @var bool $exists */
-    public $exists = false;
+    public bool $exists = false;
 
     /**
      * AbstractModel constructor.
      *
-     * @param array|object $data
+     * @param  object|array  $data
      */
-    public function __construct($data = [])
+    public function __construct(object|array $data = [])
     {
         $data = json_decode(json_encode($data), true);
 
@@ -69,7 +69,7 @@ abstract class AbstractModel implements JsonSerializable, Serializable, ArrayAcc
     /**
      * @return int|string|null
      */
-    public function getKey()
+    public function getKey(): int|string|null
     {
         return $this->original[static::$identifier] ?? null;
     }
@@ -79,7 +79,7 @@ abstract class AbstractModel implements JsonSerializable, Serializable, ArrayAcc
      *
      * @return string
      */
-    public function getKeyName()
+    public function getKeyName(): string
     {
         return static::$identifier;
     }
@@ -89,7 +89,7 @@ abstract class AbstractModel implements JsonSerializable, Serializable, ArrayAcc
      *
      * @return $this
      */
-    public function fill($attributes)
+    public function fill($attributes): static
     {
         foreach ($attributes as $key => $value) {
             $this->setAttribute($key, $value);
@@ -122,17 +122,11 @@ abstract class AbstractModel implements JsonSerializable, Serializable, ArrayAcc
         return $this->attributes;
     }
 
-    /**
-     * Get an attribute from the model.
-     *
-     * @param string $key
-     *
-     * @return mixed
-     */
-    public function getAttribute($key)
+
+    public function getAttribute(string $key): mixed
     {
         if (! $key) {
-            return;
+            return null;
         }
 
         // If the attribute exists in the attribute array or has a "get" mutator we will
@@ -142,6 +136,7 @@ abstract class AbstractModel implements JsonSerializable, Serializable, ArrayAcc
             || $this->hasGetMutator($key)) {
             return $this->getAttributeValue($key);
         }
+        return null;
     }
 
     /**
@@ -151,22 +146,20 @@ abstract class AbstractModel implements JsonSerializable, Serializable, ArrayAcc
      *
      * @return mixed
      */
-    protected function getAttributeFromArray($key)
+    protected function getAttributeFromArray($key): mixed
     {
-        if (isset($this->attributes[$key])) {
-            return $this->attributes[$key];
-        }
+        return $this->attributes[$key] ?? null;
     }
 
     /**
      * Get the model's original attribute values.
      *
-     * @param string|null $key
-     * @param mixed       $default
+     * @param  string|null  $key
+     * @param  mixed|null  $default
      *
      * @return mixed|array
      */
-    public function getOriginal($key = null, $default = null)
+    public function getOriginal(string $key = null, mixed $default = null): mixed
     {
         return $this->original[$key] ?? $default;
     }
@@ -416,9 +409,9 @@ abstract class AbstractModel implements JsonSerializable, Serializable, ArrayAcc
      *
      * @return string
      */
-    protected function getDateFormat()
+    protected function getDateFormat(): string
     {
-        return DateTime::ISO8601;
+        return DateTimeInterface::ATOM;
     }
 
     /**

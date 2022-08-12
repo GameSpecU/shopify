@@ -15,8 +15,8 @@ namespace Dan\Shopify\Models;
 class DiscountCode extends AbstractModel
 {
     /** @var string $resource_name */
-    public static $resource_name = 'discount_code';
+    public static string $resource_name = 'discount_code';
 
     /** @var string $resource_name_many */
-    public static $resource_name_many = 'discount_codes';
+    public static string $resource_name_many = 'discount_codes';
 }

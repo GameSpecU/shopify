@@ -2,12 +2,15 @@
 
 namespace Dan\Shopify\Models;
 
+use Carbon\Carbon;
+use stdClass;
+
 /**
  * Class Order.
  *
  * @property int $id
  * @property string $email
- * @property \Carbon\Carbon $closed_at
+ * @property Carbon $closed_at
  * @property int $number
  * @property string $note
  * @property string $token
@@ -28,7 +31,7 @@ namespace Dan\Shopify\Models;
  * @property string $name
  * @property string $referring_site
  * @property string $landing_site
- * @property \Carbon\Carbon $cancelled_at
+ * @property Carbon $cancelled_at
  * @property string $cancelled_reason
  * @property float $total_price_usd
  * @property string $checkout_token
@@ -38,7 +41,7 @@ namespace Dan\Shopify\Models;
  * @property string $location_
  * @property string $source_identifier
  * @property string $source_url
- * @property \Carbon\Carbon $processed_at
+ * @property Carbon $processed_at
  * @property string $device_id
  * @property string $phone
  * @property string $customer_locale
@@ -61,26 +64,26 @@ namespace Dan\Shopify\Models;
  * @property string $admin_graphql_api_id
  * @property array $line_items
  * @property array $shipping_lines
- * @property \stdClass $billing_address
- * @property \stdClass $shipping_address
+ * @property stdClass $billing_address
+ * @property stdClass $shipping_address
  * @property array $fulfillments
- * @property \stdClass $client_details
+ * @property stdClass $client_details
  * @property array $refunds
- * @property \stdClass $payment_details
- * @property \stdClass $customer
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property stdClass $payment_details
+ * @property stdClass $customer
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  */
 class Order extends AbstractModel
 {
     /** @var string $resource_name */
-    public static $resource_name = 'order';
+    public static string $resource_name = 'order';
 
     /** @var string $resource_name_many */
-    public static $resource_name_many = 'orders';
+    public static string $resource_name_many = 'orders';
 
     /** @var array $dates */
-    protected $dates = [
+    protected array $dates = [
         'closed_at',
         'created_at',
         'updated_at',
@@ -89,7 +92,7 @@ class Order extends AbstractModel
     ];
 
     /** @var array $casts */
-    protected $casts = [
+    protected array $casts = [
         'test'                    => 'bool',
         'confirmed'               => 'bool',
         'total_price'             => 'float',

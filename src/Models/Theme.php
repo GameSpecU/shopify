@@ -2,6 +2,8 @@
 
 namespace Dan\Shopify\Models;
 
+use Carbon\Carbon;
+
 /**
  * Class Theme.
  *
@@ -12,25 +14,25 @@ namespace Dan\Shopify\Models;
  * @property bool $previewable
  * @property bool $processing
  * @property string $admin_graphql_api_id
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  */
 class Theme extends AbstractModel
 {
     /** @var string $resource_name */
-    public static $resource_name = 'theme';
+    public static string $resource_name = 'theme';
 
     /** @var string $resource_name_many */
-    public static $resource_name_many = 'themes';
+    public static string $resource_name_many = 'themes';
 
     /** @var array $dates */
-    protected $dates = [
+    protected array $dates = [
         'created_at',
         'updated_at',
     ];
 
     /** @var array $casts */
-    protected $casts = [
+    protected array $casts = [
         'name'        => 'string',
         'role'        => 'string',
         'previewable' => 'bool',

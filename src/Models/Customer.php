@@ -40,19 +40,19 @@ use Carbon\Carbon;
 class Customer extends AbstractModel
 {
     /** @var string $resource_name */
-    public static $resource_name = 'customer';
+    public static string $resource_name = 'customer';
 
     /** @var string $resource_name_many */
-    public static $resource_name_many = 'customers';
+    public static string $resource_name_many = 'customers';
 
     /** @var array $dates */
-    protected $dates = [
+    protected array $dates = [
         'created_at',
         'updated_at',
     ];
 
     /** @var array $casts */
-    protected $casts = [
+    protected array $casts = [
         'accepts_marketing' => 'bool',
         'addresses'         => 'array',
         'default_address'   => 'object',

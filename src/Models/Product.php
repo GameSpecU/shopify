@@ -2,6 +2,8 @@
 
 namespace Dan\Shopify\Models;
 
+use Carbon\Carbon;
+
 /**
  * Class Product.
  *
@@ -11,7 +13,7 @@ namespace Dan\Shopify\Models;
  * @property string $vendor
  * @property string $product_type
  * @property string $handle
- * @property \Carbon\Carbon $published_at
+ * @property Carbon $published_at
  * @property string $template_suffix
  * @property string $tags
  * @property string $published_scope
@@ -20,26 +22,26 @@ namespace Dan\Shopify\Models;
  * @property array $options
  * @property array $images
  * @property string $image
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  */
 class Product extends AbstractModel
 {
     /** @var string $resource_name */
-    public static $resource_name = 'product';
+    public static string $resource_name = 'product';
 
     /** @var string $resource_name_many */
-    public static $resource_name_many = 'products';
+    public static string $resource_name_many = 'products';
 
     /** @var array $dates */
-    protected $dates = [
+    protected array $dates = [
         'created_at',
         'updated_at',
         'published_at',
     ];
 
     /** @var array $casts */
-    protected $casts = [
+    protected array $casts = [
         'variants' => 'array',
         'options'  => 'array',
         'images'   => 'array',

@@ -5,7 +5,21 @@ namespace Dan\Shopify;
 use BadMethodCallException;
 use Dan\Shopify\Exceptions\InvalidOrMissingEndpointException;
 use Dan\Shopify\Exceptions\ModelNotFoundException;
+use Dan\Shopify\Helpers\Assets;
+use Dan\Shopify\Helpers\Customers;
+use Dan\Shopify\Helpers\DiscountCodes;
 use Dan\Shopify\Helpers\Endpoint;
+use Dan\Shopify\Helpers\Fulfillments;
+use Dan\Shopify\Helpers\FulfillmentServices;
+use Dan\Shopify\Helpers\Images;
+use Dan\Shopify\Helpers\Metafields;
+use Dan\Shopify\Helpers\Orders;
+use Dan\Shopify\Helpers\PriceRules;
+use Dan\Shopify\Helpers\Products;
+use Dan\Shopify\Helpers\Risks;
+use Dan\Shopify\Helpers\Themes;
+use Dan\Shopify\Helpers\Variants;
+use Dan\Shopify\Helpers\Webhooks;
 use Dan\Shopify\Models\AbstractModel;
 use Dan\Shopify\Models\Asset;
 use Dan\Shopify\Models\Customer;
@@ -23,45 +37,51 @@ use Dan\Shopify\Models\SmartCollections;
 use Dan\Shopify\Models\Theme;
 use Dan\Shopify\Models\Variant;
 use Dan\Shopify\Models\Webhook;
+use Exception;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\RequestException;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
+use Log;
 use Psr\Http\Message\MessageInterface;
+use RuntimeException;
 
 /**
  * Class Shopify.
  *
- * @property \Dan\Shopify\Helpers\Assets $assets
- * @property \Dan\Shopify\Helpers\Customers $customers
- * @property \Dan\Shopify\Helpers\DiscountCodes $discount_codes
- * @property \Dan\Shopify\Helpers\Fulfillments $fulfillments
- * @property \Dan\Shopify\Helpers\FulfillmentServices $fulfillment_services
- * @property \Dan\Shopify\Helpers\Images $images
- * @property \Dan\Shopify\Helpers\Metafields $metafields
- * @property \Dan\Shopify\Helpers\Orders $orders
- * @property \Dan\Shopify\Helpers\PriceRules $price_rules
- * @property \Dan\Shopify\Helpers\Products $products
- * @property \Dan\Shopify\Helpers\SmartCollections $smart_collections
- * @property \Dan\Shopify\Helpers\Themes $themes
- * @property \Dan\Shopify\Helpers\Risks $risks
- * @property \Dan\Shopify\Helpers\Variants $variants
- * @property \Dan\Shopify\Helpers\Webhooks $webhooks
+ * @property Assets $assets
+ * @property Customers $customers
+ * @property DiscountCodes $discount_codes
+ * @property Fulfillments $fulfillments
+ * @property FulfillmentServices $fulfillment_services
+ * @property Images $images
+ * @property Metafields $metafields
+ * @property Orders $orders
+ * @property PriceRules $price_rules
+ * @property Products $products
+ * @property Helpers\SmartCollections $smart_collections
+ * @property Themes $themes
+ * @property Risks $risks
+ * @property Variants $variants
+ * @property Webhooks $webhooks
  *
- * @method \Dan\Shopify\Helpers\Customers customers(string $customer_id)
- * @method \Dan\Shopify\Helpers\DiscountCodes discount_codes(string $discount_code_id)
- * @method \Dan\Shopify\Helpers\Fulfillments fulfillments(string $fulfillment_id)
- * @method \Dan\Shopify\Helpers\FulfillmentServices fulfillment_services(string $fulfillment_service_id)
- * @method \Dan\Shopify\Helpers\Images images(string $image_id)
- * @method \Dan\Shopify\Helpers\Metafields metafields(string $metafield_id)
- * @method \Dan\Shopify\Helpers\Orders orders(string $order_id)
- * @method \Dan\Shopify\Helpers\PriceRules price_rules(string $price_rule_id)
- * @method \Dan\Shopify\Helpers\Products products(string $product_id)
- * @method \Dan\Shopify\Helpers\Risks risks(string $risk_id)
- * @method \Dan\Shopify\Helpers\SmartCollections smart_collections(string $smart_collection_id)
- * @method \Dan\Shopify\Helpers\Themes themes(string $theme_id)
- * @method \Dan\Shopify\Helpers\Variants variants(string $variant_id)
- * @method \Dan\Shopify\Helpers\Webhooks webhooks(string $webhook_id)
+ * @method Customers customers(string $customer_id)
+ * @method DiscountCodes discount_codes(string $discount_code_id)
+ * @method Fulfillments fulfillments(string $fulfillment_id)
+ * @method FulfillmentServices fulfillment_services(string $fulfillment_service_id)
+ * @method Images images(string $image_id)
+ * @method Metafields metafields(string $metafield_id)
+ * @method Orders orders(string $order_id)
+ * @method PriceRules price_rules(string $price_rule_id)
+ * @method Products products(string $product_id)
+ * @method Risks risks(string $risk_id)
+ * @method Helpers\SmartCollections smart_collections(string $smart_collection_id)
+ * @method Themes themes(string $theme_id)
+ * @method Variants variants(string $variant_id)
+ * @method Webhooks webhooks(string $webhook_id)
  */
 class Shopify
 {
@@ -221,7 +241,7 @@ class Shopify
     ];
 
     /**
-     * @var \Illuminate\Http\Client\PendingRequest
+     * @var PendingRequest
      */
     protected $client;
 
@@ -267,7 +287,7 @@ class Shopify
      * @return array
      *
      * @throws InvalidOrMissingEndpointException
-     * @throws \Illuminate\Http\Client\RequestException
+     * @throws RequestException
      */
     public function get($query = [], $append = '')
     {
@@ -277,7 +297,7 @@ class Shopify
         if (isset($query['page']) && in_array($api, static::$cursored_enpoints, true)) {
             if (Util::isLaravel()) {
                 if (config('shopify.options.log_deprecation_warnings')) {
-                    \Log::warning('vendor:dan:shopify:get', ['Use of deprecated query parameter. Use cursor navigation instead.']);
+                    Log::warning('vendor:dan:shopify:get', ['Use of deprecated query parameter. Use cursor navigation instead.']);
                 }
             }
 
@@ -323,7 +343,7 @@ class Shopify
         if (! in_array($this->api, static::$cursored_enpoints, true)) {
             if (Util::isLaravel()) {
                 if (config('shopify.options.log_deprecation_warnings')) {
-                    \Log::warning('vendor:dan:shopify:get', ['Use of cursored method on non-cursored endpoint.']);
+                    Log::warning('vendor:dan:shopify:get', ['Use of cursored method on non-cursored endpoint.']);
                 }
             }
 
@@ -340,7 +360,7 @@ class Shopify
             if ($key !== 'limit') {
                 if (Util::isLaravel()) {
                     if (config('shopify.options.log_deprecation_warnings')) {
-                        \Log::warning('vendor:dan:shopify:get', ['Limit param is not allowed with cursored queries.']);
+                        Log::warning('vendor:dan:shopify:get', ['Limit param is not allowed with cursored queries.']);
                     }
                 }
 
@@ -557,12 +577,11 @@ class Shopify
     /**
      * Post to a resource using the assigned endpoint ($this->api).
      *
-     * @param AbstractModel $model
-     *
-     * @throws GuzzleException
-     * @throws InvalidOrMissingEndpointException
+     * @param  AbstractModel  $model
      *
      * @return AbstractModel
+     * @throws InvalidOrMissingEndpointException
+     * @throws RequestException
      */
     public function save(AbstractModel $model)
     {
@@ -619,11 +638,9 @@ class Shopify
     {
         $data = $this->get($query, 'count');
 
-        $data = count($data) == 1
+        return count($data) == 1
             ? array_values($data)[0]
             : $data;
-
-        return $data;
     }
 
     /**
@@ -794,7 +811,7 @@ class Shopify
      * @param string $endpoint
      *
      * @return $this|Endpoint
-     * @throws \Exception
+     * @throws Exception
      */
     public function __get($endpoint)
     {
@@ -809,7 +826,7 @@ class Shopify
         }
 
         // If user tries to access property that doesn't exist, scold them.
-        throw new \RuntimeException('Property does not exist on API');
+        throw new RuntimeException('Property does not exist on API');
     }
 
     /**
@@ -841,13 +858,13 @@ class Shopify
      * @param string $uri
      * @param array $options
      *
-     * @return \Illuminate\Http\Client\Response
-     * @throws \Illuminate\Http\Client\RequestException|\Exception
+     * @return Response
+     * @throws RequestException|Exception
      */
     public function request($method, $uri = '', array $options = [])
     {
         if (Util::isLaravel() && config('shopify.options.log_api_request_data')) {
-            \Log::info('vendor:dan:shopify:api:request', compact('method', 'uri') + $options);
+            Log::info('vendor:dan:shopify:api:request', compact('method', 'uri') + $options);
         }
 
         $this->last_response = $r = $this->client->send($method, $uri, $options)->throw();
@@ -855,7 +872,7 @@ class Shopify
         $this->rate_limit = new RateLimit($r);
 
         if (Util::isLaravel() && config('shopify.options.log_api_response_data')) {
-            \Log::info('vendor:dan:shopify:api:response', (array) $r);
+            Log::info('vendor:dan:shopify:api:response', (array) $r);
         }
 
         $api_deprecated_reason = $r->header('X-Shopify-API-Deprecated-Reason');
@@ -866,7 +883,7 @@ class Shopify
                 if (config('shopify.options.log_deprecation_warnings')) {
                     $api = compact('api_version', 'api_version_warning', 'api_deprecated_reason');
                     $request = compact('method', 'uri') + $options;
-                    \Log::warning('vendor:dan:shopify:api:deprecated', compact('api', 'request'));
+                    Log::warning('vendor:dan:shopify:api:deprecated', compact('api', 'request'));
                 }
             }
         }
@@ -878,13 +895,13 @@ class Shopify
      * @param callable $request
      *
      * @return array
-     * @throws \Illuminate\Http\Client\RequestException
+     * @throws RequestException
      */
     public function rateLimited(callable $request)
     {
         try {
             return $request($this)->throw();
-        } catch (\Illuminate\Http\Client\RequestException $re) {
+        } catch (RequestException $re) {
             if ($re->response->status() == 429) {
                 return $this->rateLimited($request);
             } else {

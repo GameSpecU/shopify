@@ -2,6 +2,8 @@
 
 namespace Dan\Shopify\Models;
 
+use Carbon\Carbon;
+
 /**
  * Class Variant.
  *
@@ -31,25 +33,25 @@ namespace Dan\Shopify\Models;
  * @property bool $requires_shipping
  * @property array $metafields
  * @property string $admin_graphql_api_id
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  */
 class Variant extends AbstractModel
 {
     /** @var string $resource_name */
-    public static $resource_name = 'variant';
+    public static string $resource_name = 'variant';
 
     /** @var string $resource_name_many */
-    public static $resource_name_many = 'variants';
+    public static string $resource_name_many = 'variants';
 
     /** @var array $dates */
-    protected $dates = [
+    protected array $dates = [
         'created_at',
         'updated_at',
     ];
 
     /** @var array $casts */
-    protected $casts = [
+    protected array $casts = [
         'product_id'             => 'string',
         'title'                  => 'string',
         'price'                  => 'float',

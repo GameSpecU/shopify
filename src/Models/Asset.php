@@ -18,7 +18,7 @@ use Carbon\Carbon;
 class Asset extends AbstractModel
 {
     /** @var array $omit_on_replication */
-    public static $omit_on_replication = [
+    public static array $omit_on_replication = [
         'id',
         'public_url',
         'content_type',
@@ -30,22 +30,22 @@ class Asset extends AbstractModel
     ];
 
     /** @var string $identifier */
-    public static $identifier = 'key';
+    public static string $identifier = 'key';
 
     /** @var string $resource_name */
-    public static $resource_name = 'asset';
+    public static string $resource_name = 'asset';
 
     /** @var string $resource_name_many */
-    public static $resource_name_many = 'assets';
+    public static string $resource_name_many = 'assets';
 
     /** @var array $dates */
-    protected $dates = [
+    protected array $dates = [
         'created_at',
         'updated_at',
     ];
 
     /** @var array $casts */
-    protected $casts = [
+    protected array $casts = [
         'key'          => 'string',
         'public_url'   => 'string',
         'value'        => 'string',

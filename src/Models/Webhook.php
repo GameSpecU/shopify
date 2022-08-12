@@ -2,6 +2,8 @@
 
 namespace Dan\Shopify\Models;
 
+use Carbon\Carbon;
+
 /**
  * Class Webhook.
  *
@@ -11,25 +13,25 @@ namespace Dan\Shopify\Models;
  * @property string $format
  * @property array $fields
  * @property array $metafield_namespaces
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  */
 class Webhook extends AbstractModel
 {
     /** @var string $resource_name */
-    public static $resource_name = 'webhook';
+    public static string $resource_name = 'webhook';
 
     /** @var string $resource_name_many */
-    public static $resource_name_many = 'webhooks';
+    public static string $resource_name_many = 'webhooks';
 
     /** @var array $dates */
-    protected $dates = [
+    protected array $dates = [
         'created_at',
         'updated_at',
     ];
 
     /** @var array $casts */
-    protected $casts = [
+    protected array $casts = [
         'id'                   => 'integer',
         'address'              => 'string',
         'topic'                => 'string',

@@ -20,16 +20,16 @@ namespace Dan\Shopify\Models;
 class FulfillmentService extends AbstractModel
 {
     /** @var string $resource_name */
-    public static $resource_name = 'fulfillment_service';
+    public static string $resource_name = 'fulfillment_service';
 
     /** @var string $resource_name_many */
-    public static $resource_name_many = 'fulfillment_services';
+    public static string $resource_name_many = 'fulfillment_services';
 
     /** @var array $dates */
-    protected $dates = [];
+    protected array $dates = [];
 
     /** @var array $casts */
-    protected $casts = [
+    protected array $casts = [
         'id'                       => 'integer',
         'name'                     => 'string',
         'handle'                   => 'string',

@@ -54,20 +54,16 @@ class Assets extends Endpoint
     }
 
     /**
-     * @param $key
+     * @param $id
      *
      * @return Asset|null
      */
-    public function find($key)
+    public function find($id): ?Asset
     {
-        $data = $this->get($key);
-
-        if (isset($data['asset'])) {
-            $data = $data['asset'];
-        }
+        $data = $data['asset'] ?? $this->get($id);
 
         if (empty($data)) {
-            return;
+            return null;
         }
 
         $model = new Asset($data);
@@ -78,9 +74,8 @@ class Assets extends Endpoint
 
     /**
      * Return an array of models or Collection (if Laravel present).
-     *
      * @param string|array $keys
-     *
+     * @todo
      * @return void
      */
     public function findMany($keys)
@@ -95,7 +90,7 @@ class Assets extends Endpoint
      *
      * @return Asset
      */
-    public function save(Asset $model)
+    public function save( $model)
     {
         $response = $this->request(
             $method = 'PUT',

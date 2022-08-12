@@ -4,8 +4,11 @@ namespace Dan\Shopify\Integrations\Laravel\Http;
 
 use Closure;
 use Dan\Shopify\Util;
+use Illuminate\Http\Request;
+use JetBrains\PhpStorm\ArrayShape;
 use Log;
 use Response;
+use stdClass;
 
 /**
  * Class WebhookMiddleware.
@@ -16,7 +19,7 @@ use Response;
  */
 class WebhookMiddleware
 {
-    /** @var \Illuminate\Http\Request */
+    /** @var Request */
     protected $request;
 
     /** @var string|null $shop */
@@ -28,14 +31,14 @@ class WebhookMiddleware
     /** @var string|null $data */
     protected $data = null;
 
-    /** @var \stdClass|null $json */
+    /** @var stdClass|null $json */
     protected $json = null;
 
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
+     * @param Request $request
+     * @param  Closure  $next
      *
      * @return JsonResponse|mixed
      */
@@ -181,7 +184,10 @@ class WebhookMiddleware
     /**
      * @return array
      */
-    protected function getErrorDetails()
+    #[ArrayShape([
+        'path' => "string", 'success' => "string", 'shop' => "null|string", 'hmac' => "null|string",
+        'data' => "null|string"
+    ])] protected function getErrorDetails()
     {
         return [
             'path'    => request()->path(),

@@ -2,6 +2,8 @@
 
 namespace Dan\Shopify\Models;
 
+use Carbon\Carbon;
+
 /**
  * Class Dispute.
  *
@@ -13,21 +15,21 @@ namespace Dan\Shopify\Models;
  * @property string $reason
  * @property string $network_reason_code
  * @property string $status
- * @property \Carbon\Carbon $evidence_due_by
- * @property \Carbon\Carbon $evidence_sent_on
- * @property \Carbon\Carbon $finalized_on
- * @property \Carbon\Carbon $initiated_at
+ * @property Carbon $evidence_due_by
+ * @property Carbon $evidence_sent_on
+ * @property Carbon $finalized_on
+ * @property Carbon $initiated_at
  */
 class Dispute extends AbstractModel
 {
     /** @var string $resource_name */
-    public static $resource_name = 'dispute';
+    public static string $resource_name = 'dispute';
 
     /** @var string $resource_name_many */
-    public static $resource_name_many = 'disputes';
+    public static string $resource_name_many = 'disputes';
 
     /** @var array $dates */
-    protected $dates = [
+    protected array $dates = [
         'evidence_due_by',
         'evidence_sent_on',
         'finalized_on',
@@ -35,7 +37,7 @@ class Dispute extends AbstractModel
     ];
 
     /** @var array $casts */
-    protected $casts = [
+    protected array $casts = [
         'type'                => 'string',
         'currency'            => 'string',
         'amount'              => 'float',

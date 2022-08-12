@@ -2,6 +2,9 @@
 
 namespace Dan\Shopify\Models;
 
+use Carbon\Carbon;
+use stdClass;
+
 /**
  * Class Fulfillment.
  *
@@ -16,22 +19,22 @@ namespace Dan\Shopify\Models;
  * @property array $tracking_numbers
  * @property string $tracking_url
  * @property array $tracking_urls
- * @property \stdClass $receipt
+ * @property stdClass $receipt
  * @property string $name
  * @property string $admin_graphql_api_id
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  */
 class Fulfillment extends AbstractModel
 {
     /** @var string $resource_name */
-    public static $resource_name = 'fulfillment';
+    public static string $resource_name = 'fulfillment';
 
     /** @var string $resource_name_many */
-    public static $resource_name_many = 'fulfillments';
+    public static string $resource_name_many = 'fulfillments';
 
     /** @var array $dates */
-    protected $dates = [
+    protected array $dates = [
         'closed_at',
         'created_at',
         'updated_at',
@@ -40,7 +43,7 @@ class Fulfillment extends AbstractModel
     ];
 
     /** @var array $casts */
-    protected $casts = [
+    protected array $casts = [
         'id'                   => 'integer',
         'order_id'             => 'integer',
         'status'               => 'string',

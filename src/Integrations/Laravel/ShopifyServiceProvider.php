@@ -6,6 +6,7 @@ use Dan\Shopify\Shopify;
 use Dan\Shopify\Util;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use JetBrains\PhpStorm\ArrayShape;
 
 /**
  * Class ShopifyServiceProvider.
@@ -68,7 +69,11 @@ class ShopifyServiceProvider extends ServiceProvider
      *
      * @return array
      */
-    protected function routeWebhookConfiguration()
+    #[ArrayShape([
+        'namespace' => "string",
+        'prefix' => "\Illuminate\Config\Repository|\Illuminate\Contracts\Foundation\Application|mixed",
+        'middleware' => "mixed"
+    ])] protected function routeWebhookConfiguration()
     {
         return [
             //'domain' => config('shopify.webhooks.route_domain', config('app.url')),

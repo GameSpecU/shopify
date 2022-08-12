@@ -23,10 +23,10 @@ use Carbon\Carbon;
 class SmartCollections extends AbstractModel
 {
     /** @var string $resource_name */
-    public static $resource_name = 'smart_collection';
+    public static string $resource_name = 'smart_collection';
 
     /** @var string $resource_name_many */
-    public static $resource_name_many = 'smart_collections';
+    public static string $resource_name_many = 'smart_collections';
 
     /** Published Scope constants */
     public const PUBLISHED_SCOPE_GLOBAL = 'global';
@@ -61,7 +61,7 @@ class SmartCollections extends AbstractModel
     ];
 
     /** @var array $casts */
-    protected $casts = [
+    protected array $casts = [
         'image' => 'array',
         'rules' => 'array',
     ];

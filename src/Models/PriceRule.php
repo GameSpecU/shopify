@@ -38,36 +38,36 @@ use Carbon\Carbon;
 class PriceRule extends AbstractModel
 {
     /** @var string $resource_name */
-    public static $resource_name = 'price_rule';
+    public static string $resource_name = 'price_rule';
 
     /** @var string $resource_name_many */
-    public static $resource_name_many = 'price_rules';
+    public static string $resource_name_many = 'price_rules';
 
-    const ALLOCATION_METHOD_ACROSS = 'across';
-    const ALLOCATION_METHOD_EACH = 'each';
-    const CUSTOMER_SELECTION_ALL = 'all';
-    const CUSTOMER_SELECTION_PREREQUISITE = 'prerequisite';
-    const TARGET_SELECTION_ALL = 'all';
-    const TARGET_SELECTION_ENTITLED = 'entitled';
-    const TARGET_TYPE_LINE_ITEM = 'line_item';
-    const TARGET_TYPE_SHIPPING_LINE = 'shipping_line';
-    const VALUE_TYPE_FIXED_AMOUNT = 'fixed_amount';
-    const VALUE_TYPE_PERCENTAGE = 'percentage';
+    public const ALLOCATION_METHOD_ACROSS = 'across';
+    public const ALLOCATION_METHOD_EACH = 'each';
+    public const CUSTOMER_SELECTION_ALL = 'all';
+    public const CUSTOMER_SELECTION_PREREQUISITE = 'prerequisite';
+    public const TARGET_SELECTION_ALL = 'all';
+    public const TARGET_SELECTION_ENTITLED = 'entitled';
+    public const TARGET_TYPE_LINE_ITEM = 'line_item';
+    public const TARGET_TYPE_SHIPPING_LINE = 'shipping_line';
+    public const VALUE_TYPE_FIXED_AMOUNT = 'fixed_amount';
+    public const VALUE_TYPE_PERCENTAGE = 'percentage';
 
     /** @var array $allocation_methods */
-    public static $allocation_methods = [
+    public static array $allocation_methods = [
         self::ALLOCATION_METHOD_ACROSS,
         self::ALLOCATION_METHOD_EACH,
     ];
 
     /** @var array $customer_selections */
-    public static $customer_selections = [
+    public static array $customer_selections = [
         self::CUSTOMER_SELECTION_ALL,
         self::CUSTOMER_SELECTION_PREREQUISITE,
     ];
 
     /** @var array $target_selections */
-    public static $target_selections = [
+    public static array $target_selections = [
         self::TARGET_SELECTION_ALL,
         self::TARGET_SELECTION_ENTITLED,
     ];
@@ -85,7 +85,7 @@ class PriceRule extends AbstractModel
     ];
 
     /** @var array $casts */
-    protected $casts = [
+    protected array $casts = [
         'entitled_collection_ids'           => 'array',
         'entitled_country_ids'              => 'array',
         'entitled_product_ids'              => 'array',

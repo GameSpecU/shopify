@@ -3,6 +3,7 @@
 namespace Dan\Shopify;
 
 use Illuminate\Http\Client\Response;
+use JetBrains\PhpStorm\ArrayShape;
 use JsonSerializable;
 use Psr\Http\Message\MessageInterface;
 
@@ -26,7 +27,7 @@ class RateLimit implements JsonSerializable
     /**
      * RateLimit constructor.
      *
-     * @param \Illuminate\Http\Client\Response|null $response
+     * @param  Response|null $response
      */
     public function __construct(?Response $response)
     {
@@ -136,7 +137,7 @@ class RateLimit implements JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize()
+    #[ArrayShape(['calls' => "mixed", 'cap' => "mixed", 'retry_after' => "mixed"])] public function jsonSerialize()
     {
         return [
             'calls' => $this->calls,

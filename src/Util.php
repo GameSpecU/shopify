@@ -4,6 +4,8 @@ namespace Dan\Shopify;
 
 use Dan\Shopify\Models\AbstractModel;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use stdClass;
 
 /**
  * Class Util.
@@ -185,34 +187,37 @@ class Util
         return $hmac == $calculated_hmac;
     }
 
-    /**
-     * @param int|string|array|\stdClass|\Dan\Shopify\Models\AbstractModel $mixed
-     *
-     * @return int|null
-     */
-    public static function getKeyFromMixed($mixed)
+
+    public static function getKeyFromMixed(AbstractModel|int|array|string|stdClass $mixed): float|int|string|null
     {
         if (is_numeric($mixed)) {
             return $mixed;
-        } elseif (is_array($mixed) && isset($mixed['id'])) {
-            return $mixed['id'];
-        } elseif ($mixed instanceof \stdClass && isset($mixed->id)) {
-            return $mixed->id;
-        } elseif ($mixed instanceof AbstractModel) {
-            return $mixed->getKey();
-        } else {
-            return;
         }
+
+        if (is_array($mixed) && isset($mixed['id'])) {
+            return $mixed['id'];
+        }
+
+        if ($mixed instanceof stdClass && isset($mixed->id)) {
+            return $mixed->id;
+        }
+
+        if ($mixed instanceof AbstractModel) {
+            return $mixed->getKey();
+        }
+
+        return null;
     }
 
     /**
-     * @param string $client_id
-     * @param string $client_secret
-     * @param string $shop
-     * @param string $code
+     * @param  string  $client_id
+     * @param  string  $client_secret
+     * @param  string  $shop
+     * @param  string  $code
      * @return array
+     * @throws GuzzleException
      */
-    public static function appAccessRequest($client_id, $client_secret, $shop, $code)
+    public static function appAccessRequest(string $client_id, string $client_secret, string $shop, string $code): array
     {
         $shop = static::normalizeDomain($shop);
         $base_uri = "https://{$shop}/";
@@ -269,9 +274,7 @@ class Util
             'nounce' => 'ok',
         ];
 
-        $url = "https://{$shop}/admin/oauth/authorize?".http_build_query($url);
-
-        return $url;
+        return "https://{$shop}/admin/oauth/authorize?".http_build_query($url);
     }
 
     /**
